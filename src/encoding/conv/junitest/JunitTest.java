@@ -1,10 +1,16 @@
 package encoding.conv.junitest;
 
+import java.io.*;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.*;
 
 import org.junit.Test;
 import org.mozilla.universalchardet.UniversalDetector;
+
+import encoding.conv.setting.*;
+import encoding.conv.process.*;
+
 
 /**
  * JunitTest 相关类只对代码片段做单元测试；
@@ -47,4 +53,35 @@ public class JunitTest {
 		detector.reset();
 
 	}
+	
+	
+	/**
+	 * 测试全流程
+	 * @throws IOException 
+	 * */
+	@Test
+	public void test01() throws Exception {
+		
+		//读取用户的配置信息；
+		ConvSetting convsetting = ReadSetting.readUserSetting();
+		
+		//获取根目录下的所有文件；
+		ExtractFiles efs = new ExtractFiles();
+		List<File> fileList = efs.getFileList(convsetting.getDirPath());
+		
+		//识别所有文件的编码格式；
+		ConvProcess cps = new ConvProcess();
+		Map<File, String> file_code = cps.recognizeEncoding(fileList);
+		
+		//将识别出原编码格式的所有文件转换成用户指定的编码格式；
+		cps.convFileEncoding(file_code, convsetting.getDstEncoding());
+		
+		
+		//----over---
+	}
+	
+	
+	
+	
+	
 }

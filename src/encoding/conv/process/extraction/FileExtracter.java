@@ -1,4 +1,4 @@
-package encoding.conv.process;
+package encoding.conv.process.extraction;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,22 +9,9 @@ import org.junit.Test;
 /**
  * 获取待转换的所有文件；
  * */
-public class ExtractFiles {
+public class FileExtracter {
 	
-	@Test
-	public void test() {
-		
-		List<File> files = getFileList("D:\\ljp_SoftSpace\\__myDevProj\\EncodingConverter_eclipse202009\\ToConvDir");
-		
-		for(int i=0; i<files.size(); i++) {
-			System.out.println( files.get(i) );
-		}
-		
-		files = getFileList("D:\\ljp_SoftSpace\\__myDevProj\\EncodingConverter_eclipse202009\\ToConvDir");
-		
-	}
-	
-	//有待转换的所有文件；
+	//有待转换的所有文件；以静态方式保存；
 	private static List<File> fileList = new ArrayList<>();
 	private static boolean hasExtracted = false;
 
@@ -64,6 +51,5 @@ public class ExtractFiles {
 		}
 		
 	}
-	
 	
 }

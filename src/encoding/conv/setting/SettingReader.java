@@ -6,12 +6,19 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import encoding.conv.utils.string.StringUtil;
 
 /**
  * 读取用户的设置；
  * */
 public class SettingReader {
 	
+	/**
+	 * 从配置文件中读取用户设置参数，并做校验；最终将参数以对象形式返回；
+	 * 
+	 * @return 返回用户参数设置的对象
+	 * 
+	 * */
 	public UserConvSetting readUserSetting() throws IOException {
 		
 		UserConvSetting userSetting = new UserConvSetting();
@@ -36,16 +43,16 @@ public class SettingReader {
 	
 	private void checkSetting(UserConvSetting setting) {
 		//校验目录；
-		if(setting.getParam(setting.dirPath)==null) {
+		if(StringUtil.isBlank( setting.getParam(setting.dirPath) )) {
 			throw new RuntimeException("转换目录为空！");
 		}
 		//校验目标格式；
-		if(setting.getParam(setting.dstEncoding)==null) {
+		if(StringUtil.isBlank( setting.getParam(setting.dstEncoding) )) {
 			setting.putParam(setting.dstEncoding, "utf-8");
 		}
 		//校验编码识别工具；
-		if(setting.getParam(setting.detectingTool)==null) {
-			setting.putParam(setting.detectingTool, "juniversalchardet_v1.0.3_new.jar");
+		if(StringUtil.isBlank( setting.getParam(setting.detectingTool) )) {
+			setting.putParam(setting.detectingTool, "det01");
 		}
 	}
 	

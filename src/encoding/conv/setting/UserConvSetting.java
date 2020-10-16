@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 该类对应用户的转换参数设置；
+ * 该类对应用户配置文件中的转换参数设置；
  * */
 public class UserConvSetting {
 	
@@ -14,7 +14,7 @@ public class UserConvSetting {
 	public final String dstEncoding = "dstEncoding";
 	public final String detectingTool = "detectingTool";
 	
-	//存放用户设置的参数；
+	//存放用户设置的参数；以静态方式存放；
 	private static final Map<String,String> userSetting = new HashMap<>();
 	
 	//构造器包内访问权限；

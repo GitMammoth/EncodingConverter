@@ -1,6 +1,7 @@
 package encoding.conv.setting;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
@@ -42,15 +43,38 @@ public class SettingReader {
 	}
 	
 	private void checkSetting(UserConvSetting setting) {
-		//校验目录；
-		if(StringUtil.isBlank( setting.getParam(setting.dirPath) )) {
-			throw new RuntimeException("转换目录为空！");
+		/**
+		 * 校验指定根目录：
+		 * 		1. 目录不能为空；
+		 * 		2. 该目录必须存在； 
+		 */
+		String dirPath = setting.getParam(setting.dirPath);
+		if(StringUtil.isBlank(dirPath)) {
+			throw new RuntimeException("转换目录不能为空！");
 		}
-		//校验目标格式；
+		File dirFile = new File(dirPath);
+		if(!dirFile.exists()) {
+			throw new RuntimeException("指定目录不存在！");
+		}
+		
+		/**
+		 * 原编码格式不做校验，如果为空程序会自动识别；
+		 * */
+		
+		
+		/**
+		 * 校验目标编码格式；
+		 * 		1. 如果目标编码为空，则默认为utf-8
+		 */
 		if(StringUtil.isBlank( setting.getParam(setting.dstEncoding) )) {
 			setting.putParam(setting.dstEncoding, "utf-8");
 		}
-		//校验编码识别工具；
+		
+		/**
+		 * 校验编码识别工具；
+		 * 		1. 若编码识别参数为空，则默认指定为det01；
+		 * 		2. 若后续程序匹配不上该参数值，也会走默认的det01；
+		 */
 		if(StringUtil.isBlank( setting.getParam(setting.detectingTool) )) {
 			setting.putParam(setting.detectingTool, "det01");
 		}

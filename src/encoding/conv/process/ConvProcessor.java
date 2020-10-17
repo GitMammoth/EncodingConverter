@@ -43,7 +43,6 @@ public class ConvProcessor {
 		FileExtracter fext = new FileExtracter();	//创建文件抽取器对象；
 		fileList = fext.getFileList(rootPath);		//根据指定目录抽取到其中的所有文件；
 		
-		
 		//根据用户设置判断是否需要自动识别原文件的编码格式；
 		if(StringUtil.isBlank(oriEncoding)) {//用户没有指定原编码格式，则需要自动识别；
 			
@@ -105,21 +104,14 @@ public class ConvProcessor {
 		String newPath = getNewPath(rootPath, file.getAbsolutePath());
 		
 		InputStreamReader isr = new InputStreamReader(new FileInputStream(file), originalCode.toLowerCase());
-		/****
-		 * begin 这里目前有一个问题，_new目录不存在会报错；
-		 * */
-//		File temp = new File(newPath);
-//		temp.mkdirs();
-		
-		
-		/***end**/
-//        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(newPath), dstEncoding.toLowerCase());
-//        int len = 0;
-//        char[] chars = new char[1024];
-//        while ((len = isr.read(chars)) != -1) {
-//            osw.write(chars,0, len);
-//        }
-//        osw.close();
+        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(newPath), dstEncoding.toLowerCase());
+        
+        int len = 0;
+        char[] chars = new char[1024];
+        while ((len = isr.read(chars)) != -1) {
+            osw.write(chars,0, len);
+        }
+        osw.close();
         isr.close();
 	}
 	
@@ -129,22 +121,27 @@ public class ConvProcessor {
 	 * 如：
 	 * 指定转换的根目录：	rootPath =  D:/dir
 	 * 当前待转换的文件：	curPath  =  D:/dir/xxx/yyy/file.txt
-	 * 转换后新的路径：		newPath  =  D:/dir_new/xxx/yyy/file.txt
+	 * 转换后新的路径：		newPath  =  D:/dir_newConv_/xxx/yyy/file.txt
 	 * 
 	 * */
 	private String getNewPath(String rootPath, String curPath) {
-		String newPath = rootPath + "_new";
-		
+		String newFilePath = rootPath + "_newConv_";
 		String path = curPath.substring(rootPath.length());
-		newPath += path;
+		newFilePath += path;
 		
-		//这里需要为新路径的创建目录，否则直接使用输出流会报路径找不到的错误；
-		int aa = newPath.lastIndexOf("/");
-		String bb = newPath.substring(0, aa);
-		File file = new File(bb);
-		file.mkdirs();
+		//------------ begin 这里需要为新路径创建目录，否则直接使用输出流会报路径找不到的错误；
+		int lastSlash = Math.max(
+				newFilePath.lastIndexOf("/"),
+				newFilePath.lastIndexOf("\\")
+				);
+		String newDirPath = newFilePath.substring(0, lastSlash);
+		File newDirFile = new File(newDirPath);
+		if(!newDirFile.exists()) {			
+			newDirFile.mkdirs();
+		}
+		//------------- end 为转换后的新文件创建目录；
 		
-		return newPath;
+		return newFilePath;
 	}
 	
 	/**
@@ -152,8 +149,12 @@ public class ConvProcessor {
 	 * */
 	//@Test
 	public void test() {
-		String rootPath = "D:/dir";
-		String curPath  = "D:/dir/xxx/yyy/file.txt";
+		String rootPath = 
+				"D:\\A02_Recent\\myDev_EncodingConvert\\TestFolder\\ConvDir_root";
+		
+		String curPath  = 
+				"D:\\A02_Recent\\myDev_EncodingConvert\\TestFolder\\ConvDir_root\\folder\\eclipse中的文件_gbk.java";
+		
 		String newPath = getNewPath(rootPath, curPath);
 		
 		

@@ -1,3 +1,10 @@
+
+
+
+
+
+校验功能有主动调用的一方来完成，被调用者对数据合法性不负责任；
+
 org.mozilla.universalchardet包及其子包下的所有类，是来自第三方开源库：juniversalchardet
 
 
